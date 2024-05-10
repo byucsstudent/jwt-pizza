@@ -20,8 +20,9 @@ jobs:
 
       - name: Build
         run: npm ci && npm run build
+
       - name: Update pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist/
   deploy:
