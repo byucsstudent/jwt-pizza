@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: |
           npm ci && npm run build
-          ls -la
+          cp dist/index.html dist/404.html
 
       - name: Update pages artifact
         uses: actions/upload-pages-artifact@v3
