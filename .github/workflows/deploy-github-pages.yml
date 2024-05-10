@@ -1,4 +1,4 @@
-name: Build and deploy to GitHub Pages hello
+name: Build and deploy to GitHub Pages
 
 on:
   push:
@@ -9,9 +9,6 @@ jobs:
   build:
     name: Build frontend
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
