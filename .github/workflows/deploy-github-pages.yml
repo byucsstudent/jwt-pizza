@@ -19,7 +19,9 @@ jobs:
           node-version: '20.x'
 
       - name: Build
-        run: npm ci && npm run build
+        run: |
+          npm ci && npm run build
+          ls -la
 
       - name: Update pages artifact
         uses: actions/upload-pages-artifact@v3
