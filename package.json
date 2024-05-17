@@ -1,16 +1,14 @@
 {
   "name": "pizzashop",
   "version": "1.0.0",
-  "description": "The world's first JWT JWT Pizza",
+  "description": "The world's first JWT Pizza",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
