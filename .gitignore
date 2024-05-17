@@ -3,3 +3,9 @@
 cookies.txt
 config.js
 coverage
+dist
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.nyc_output
