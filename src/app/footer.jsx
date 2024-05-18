@@ -2,6 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 export default function Footer({ navItems }) {
+  const [version, setVersion] = React.useState('');
+
+  React.useEffect(() => {
+    fetch('version.json')
+      .then((response) => response.json())
+      .then((data) => setVersion(data.version));
+  }, []);
+
   return (
     <footer className='m-8 flex justify-center'>
       <div className='container border-t-2 border-gray-200 max-w-3xl'>
@@ -15,7 +23,7 @@ export default function Footer({ navItems }) {
               )
           )}
         </nav>
-        <p className='text-sm text-center italic text-gray-400'>© 2024 JWT Pizza LTD. All rights reserved.</p>
+        <p className='text-sm text-center italic text-gray-400'>© 2024 JWT Pizza LTD. All rights reserved. Version: {version}</p>
       </div>
     </footer>
   );
