@@ -94,5 +94,5 @@ test('purchase with login', async ({ page }) => {
   await page.getByRole('button', { name: 'Pay now' }).click();
 
   // Check balance
-  await expect(page.getByText('₿')).toHaveText('0.008 ₿');
+  await expect(page.getByText('0.008')).toBeVisible();
 });
