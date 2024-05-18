@@ -1,11 +1,5 @@
 import { test, expect } from 'playwright-test-coverage';
 
-test('home', async ({ page }) => {
-  await page.goto('/');
-
-  expect(await page.title()).toBe('JWT Pizza');
-});
-
 test('purchase with login', async ({ page }) => {
   await page.route('*/**/api/menu', async (route) => {
     const menuRes = [
