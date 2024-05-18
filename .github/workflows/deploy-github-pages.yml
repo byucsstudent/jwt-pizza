@@ -23,6 +23,11 @@ jobs:
           npm ci && npm run build
           cp dist/index.html dist/404.html
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        run: npm run test:coverage
+
       - name: Update pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
