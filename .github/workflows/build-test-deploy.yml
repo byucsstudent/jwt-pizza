@@ -41,6 +41,18 @@ jobs:
           git commit -m "generated"
           git push
 
+      - name: Create OIDC token to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::464152414144:role/github-ci
+
+      - name: Push to AWS S3
+        run: |
+          aws s3 cp dist s3://byucsstudent.click --recursive
+          aws cloudfront create-invalidation --distribution-id E2GRFXFEBQ5OEU --paths "/*"
+
   #     - name: Update pages artifact
   #       uses: actions/upload-pages-artifact@v3
   #       with:
