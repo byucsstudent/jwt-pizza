@@ -93,6 +93,9 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+
 jobs:
   build:
     name: Build frontend
@@ -109,7 +112,6 @@ jobs:
       - name: Build
         run: |
           npm ci && npm run build
-          cp dist/index.html dist/404.html
 
       - name: Run tests
         run: |
