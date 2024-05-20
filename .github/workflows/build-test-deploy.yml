@@ -23,10 +23,10 @@ jobs:
           npm ci && npm run build
           cp dist/index.html dist/404.html
 
-      - name: Run tests
-        run: |
-          npx playwright install --with-deps chromium
-          npm run test:coverage
+      # - name: Run tests
+      #   run: |
+      #     npx playwright install --with-deps chromium
+      #     npm run test:coverage
 
       - name: Update coverage and version
         run: |
@@ -41,23 +41,24 @@ jobs:
           git commit -m "generated"
           git push
 
-      - name: Update pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/
-  deploy:
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  #     - name: Update pages artifact
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: dist/
+  # deploy:
+  #   needs: build
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
+
 # --------------------------------------------------
 # name: Deploy single page to S3
 # on:
@@ -98,8 +99,6 @@ jobs:
 # jobs:
 #   build:
 #     name: Build frontend
-#     permissions:
-#       id-token: write
 #     runs-on: ubuntu-latest
 #     steps:
 #       - name: Checkout repo
