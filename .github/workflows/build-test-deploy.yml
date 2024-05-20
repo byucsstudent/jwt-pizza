@@ -24,8 +24,8 @@ jobs:
           mkdir dist
           printf "Deployed with GitHub Actions" > desit/index.html
           ls -la
-          aws s3 ls s3://test.leesjensen.com
-          aws s3 cp dist s3://test.leesjensen.com --recursive
+          aws s3 ls s3://byucsstudent.click
+          aws s3 cp dist s3://byucsstudent.click --recursive
 
 # name: Build, test, and deploy to GitHub Pages
 
