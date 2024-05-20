@@ -1,5 +1,5 @@
 # --------------------------------------------------
-name: Build, test, and deploy to GitHub Pages
+name: Build, test, and deploy to S3
 on:
   push:
     branches:
@@ -53,8 +53,7 @@ jobs:
     steps:
       - name: Push to AWS S3
         run: |
-          mkdir dist
-          printf "<h1>CloudFront deployment with GitHub Actions v4</h1>" > dist/index.html
+          ls
           aws s3 cp dist s3://byucsstudent.click --recursive
           aws cloudfront create-invalidation --distribution-id E2GRFXFEBQ5OEU --paths "/*"
 
