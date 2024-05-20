@@ -22,7 +22,7 @@ jobs:
       - name: Push to AWS S3
         run: |
           mkdir dist
-          printf "<h1>CloudFront deployment with GitHub Actions</h1>" > dist/index.html
+          printf "<h1>CloudFront deployment with GitHub Actions v4</h1>" > dist/index.html
           ls -la
           aws s3 ls s3://byucsstudent.click
           aws s3 cp dist s3://byucsstudent.click --recursive
