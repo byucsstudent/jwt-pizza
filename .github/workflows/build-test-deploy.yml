@@ -22,10 +22,11 @@ jobs:
       - name: Push to AWS S3
         run: |
           mkdir dist
-          printf "<h1>Deployed with GitHub Actions v3</h1>" > dist/index.html
+          printf "<h1>Deployed with GitHub Actions</h1>" > dist/index.html
           ls -la
           aws s3 ls s3://byucsstudent.click
           aws s3 cp dist s3://byucsstudent.click --recursive
+          aws cloudfront create-invalidation --distribution-id EDFDVBD6EXAMPLE --paths "/*"
 
 # name: Build, test, and deploy to GitHub Pages
 
