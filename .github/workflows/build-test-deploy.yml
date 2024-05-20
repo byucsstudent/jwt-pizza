@@ -64,7 +64,7 @@ jobs:
           path: dist/
       - name: Push to AWS S3
         run: |
-          aws s3 cp dist s3://byucsstudent.click --recursive
+          aws s3 cp dist s3://pizza.byucsstudent.click --recursive
           aws cloudfront create-invalidation --distribution-id E2GRFXFEBQ5OEU --paths "/*"
 
 # --------------------------------------------------
