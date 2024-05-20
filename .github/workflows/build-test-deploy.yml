@@ -18,11 +18,11 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::464152414144:role/GitHubAction-CD
+          role-to-assume: arn:aws:iam::464152414144:role/github-ci
       - name: Push to AWS S3
         run: |
           mkdir dist
-          printf "Deployed with GitHub Actions" > desit/index.html
+          printf "Deployed with GitHub Actions" > dist/index.html
           ls -la
           aws s3 ls s3://byucsstudent.click
           aws s3 cp dist s3://byucsstudent.click --recursive
