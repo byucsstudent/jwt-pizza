@@ -94,6 +94,7 @@ on:
       - main
 
 permissions:
+  pages: write
   id-token: write
 
 jobs:
@@ -118,6 +119,13 @@ jobs:
           npx playwright install --with-deps chromium
           npm run test:coverage
 
+      - name: Create OIDC token to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::464152414144:role/github-ci
+
       - name: Update coverage and version
         run: |
           printf '{"version": "%s" }' $(date +'%Y%m%d.%H%M%S') > public/version.json
@@ -130,13 +138,6 @@ jobs:
           git add .
           git commit -m "generated"
           git push
-
-      - name: Create OIDC token to AWS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          audience: sts.amazonaws.com
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::464152414144:role/github-ci
 
       - name: Push to AWS S3
         run: |
