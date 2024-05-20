@@ -93,13 +93,11 @@ on:
     branches:
       - main
 
-permissions:
-  pages: write
-  id-token: write
-
 jobs:
   build:
     name: Build frontend
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
