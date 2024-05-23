@@ -1,5 +1,5 @@
 # --------------------------------------------------
-name: Build, test, and deploy to S3
+name: CI Pipeline
 on:
   push:
     branches:
