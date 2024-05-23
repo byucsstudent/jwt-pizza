@@ -56,7 +56,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::464152414144:role/github-ci
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
       - name: Download pages artifact
         uses: actions/download-artifact@v4
         with:
@@ -65,7 +65,7 @@ jobs:
       - name: Push to AWS S3
         run: |
           aws s3 cp dist s3://pizza.byucsstudent.click --recursive
-          aws cloudfront create-invalidation --distribution-id E2GRFXFEBQ5OEU --paths "/*"
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
 # --------------------------------------------------
 # name: Build, test, and deploy to GitHub Pages
@@ -149,7 +149,7 @@ jobs:
 #         with:
 #           audience: sts.amazonaws.com
 #           aws-region: us-east-1
-#           role-to-assume: arn:aws:iam::464152414144:role/github-ci
+#           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/github-ci
 #       - name: Push to AWS S3
 #         run: |
 #           mkdir dist
