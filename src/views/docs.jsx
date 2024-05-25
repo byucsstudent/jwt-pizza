@@ -3,6 +3,11 @@ import View from './view';
 import { pizzaService } from '../service/service';
 import { useParams } from 'react-router-dom';
 
+const apis = [
+  { name: 'service', url: import.meta.env.VITE_PIZZA_SERVICE_URL },
+  { name: 'factory', url: import.meta.env.VITE_PIZZA_FACTORY_URL },
+];
+
 const Docs = () => {
   const { docType } = useParams();
   const [docs, setDocs] = React.useState({ endpoints: [] });
@@ -23,6 +28,16 @@ const Docs = () => {
             <p>{doc.description}</p>
 
             <div className='p-4 bg-neutral-600 text-neutral-50 font-mono text-xs mt-4 mx-4'>{doc.example}</div>
+          </div>
+        ))}
+      </div>
+      <div className='pe-4 pb-4 text-xs float-end text-neutral-500 text-end'>
+        {apis.map((api, index) => (
+          <div key={index}>
+            {api.name}:&nbsp;
+            <a className='hover:underline hover:text-neutral-400' href={api.url}>
+              {api.url}
+            </a>
           </div>
         ))}
       </div>
