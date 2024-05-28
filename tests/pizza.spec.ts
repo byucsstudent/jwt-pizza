@@ -10,19 +10,18 @@ test('purchase with login', async ({ page }) => {
     await route.fulfill({ json: menuRes });
   });
 
-  await page.route('*/**/api/order/franchise', async (route) => {
+  await page.route('*/**/api/franchise', async (route) => {
     const franchiseRes = [
       {
-        id: 2,
-        name: 'LotaPizza',
+        id: 1,
+        name: 'SuperPie',
         stores: [
-          { id: 4, name: 'Lehi' },
-          { id: 5, name: 'Springville' },
-          { id: 6, name: 'American Fork' },
+          { id: 1, name: 'Orem' },
+          { id: 2, name: 'Provo' },
+          { id: 3, name: 'Payson' },
         ],
       },
-      { id: 3, name: 'PizzaCorp', stores: [{ id: 7, name: 'Spanish Fork' }] },
-      { id: 4, name: 'topSpot', stores: [] },
+      { id: 3, name: 'PizzaCorp', stores: [{ id: 4, name: 'Spanish Fork' }] },
     ];
     expect(route.request().method()).toBe('GET');
     await route.fulfill({ json: franchiseRes });
@@ -62,7 +61,7 @@ test('purchase with login', async ({ page }) => {
     await route.fulfill({ json: orderRes });
   });
 
-  await page.goto('http://localhost:5173/');
+  await page.goto('/');
 
   // Go to order page
   await page.getByRole('button', { name: 'Order now' }).click();
