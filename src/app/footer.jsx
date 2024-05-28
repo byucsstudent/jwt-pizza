@@ -5,7 +5,7 @@ export default function Footer({ navItems }) {
   const [version, setVersion] = React.useState('');
 
   React.useEffect(() => {
-    fetch('version.json')
+    fetch('/version.json')
       .then((response) => response.json())
       .then((data) => setVersion(data.version));
   }, []);
