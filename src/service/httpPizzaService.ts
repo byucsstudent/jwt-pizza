@@ -15,6 +15,11 @@ class HttpPizzaService implements PizzaService {
           credentials: 'include',
         };
 
+        const authToken = localStorage.getItem('token');
+        if (authToken) {
+          options.headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
         if (body) {
           options.body = JSON.stringify(body);
         }
@@ -37,20 +42,23 @@ class HttpPizzaService implements PizzaService {
   }
 
   async login(email: string, password: string): Promise<User> {
-    const user = await this.callEndpoint('/api/auth', 'PUT', { email, password });
+    const { user, token } = await this.callEndpoint('/api/auth', 'PUT', { email, password });
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
     return Promise.resolve(user);
   }
 
   async register(name: string, email: string, password: string): Promise<User> {
-    const user = await this.callEndpoint('/api/auth', 'POST', { name, email, password });
+    const { user, token } = await this.callEndpoint('/api/auth', 'POST', { name, email, password });
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
     return Promise.resolve(user);
   }
 
   async logout(): Promise<void> {
     return new Promise(async (resolve) => {
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
       await this.callEndpoint('/api/auth', 'DELETE');
       resolve();
     });
