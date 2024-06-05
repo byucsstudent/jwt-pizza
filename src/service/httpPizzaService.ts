@@ -57,9 +57,9 @@ class HttpPizzaService implements PizzaService {
 
   async logout(): Promise<void> {
     return new Promise(async (resolve) => {
+      await this.callEndpoint('/api/auth', 'DELETE');
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      await this.callEndpoint('/api/auth', 'DELETE');
       resolve();
     });
   }
