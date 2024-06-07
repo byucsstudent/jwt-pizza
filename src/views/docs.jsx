@@ -27,7 +27,14 @@ const Docs = () => {
             </h2>
             <p>{doc.description}</p>
 
-            <div className='p-4 bg-neutral-600 text-neutral-50 font-mono text-xs mt-4 mx-4'>{doc.example}</div>
+            <div className='pt-3 overflow-hidden'>
+              <label className='font-bold'>Example request</label>
+              <div className='p-4 bg-neutral-600 text-neutral-50 font-mono text-xs mt-4 mx-4'>{doc.example}</div>
+            </div>
+            <div className='pt-3 overflow-hidden'>
+              <label className='font-bold'>Response</label>
+              <pre className='p-4 bg-neutral-600 text-neutral-50 font-mono text-xs mt-4 mx-4'>{JSON.stringify(doc.response, null, 2)}</pre>
+            </div>
           </div>
         ))}
       </div>
