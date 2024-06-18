@@ -4,7 +4,9 @@
 - Peer 2: Dakota Jones
 - Date: June 18, 2053
 
-## 刘伟 Self attack
+## Self attacks
+
+### 刘伟
 
 | Item           | Result                                                                               |
 | -------------- | ------------------------------------------------------------------------------------ |
@@ -16,7 +18,7 @@
 | Images         | ![Unable to access db](deadDatabase.png) <br/> Stores and menu no longer accessible. |
 | Corrections    | Sanitize user inputs.                                                                |
 
-## Dakota Self attack
+### Dakota
 
 | Item           | Result                                         |
 | -------------- | ---------------------------------------------- |
@@ -28,7 +30,9 @@
 | Images         | ![Fifi](cat.png)                               |
 | Corrections    | Deleted extra files from the public directory. |
 
-## 刘伟 peer attack
+## Peer attacks
+
+### 刘伟 peer attack on Dakota
 
 | Item           | Result                                                                               |
 | -------------- | ------------------------------------------------------------------------------------ |
@@ -40,14 +44,14 @@
 | Images         | ![Unable to access db](deadDatabase.png) <br/> Stores and menu no longer accessible. |
 | Corrections    | Sanitize user inputs.                                                                |
 
-## Dakota peer attack
+### Dakota peer attack on 刘伟
 
 | Item           | Result                                            |
 | -------------- | ------------------------------------------------- |
 | Date           | June 18, 2053                                     |
 | Target         | pizza.刘伟.click                                  |
 | Classification | Security Misconfiguration                         |
-| Severity       | 0                                                 |
+| Severity       | NA                                                |
 | Description    | Looked for picture of cat, but nothing was there. |
 | Images         |                                                   |
 | Corrections    | None                                              |
