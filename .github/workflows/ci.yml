@@ -28,10 +28,11 @@ jobs:
           tag_name: version-${{steps.set_version.outputs.version}}
           release_name: Version ${{steps.set_version.outputs.version}}
           body: |
-            This is a very important release
+            ## Changes
 
-            commit: ${{ github.ref }}
-            message: ${{ github.event.head_commit.message }}
+            ${{ github.event.head_commit.message }}
+
+            **commit**: ${{ github.sha }}
           draft: false
           prerelease: false
 
