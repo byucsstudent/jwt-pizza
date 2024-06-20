@@ -52,14 +52,12 @@ jobs:
         with:
           name: package
           path: dist/
-
-          # comment
   deploy:
     needs: build
     permissions:
       id-token: write
     runs-on: ubuntu-latest
-    environment:
+    environment: # This is a test. We may not want this. it requires special IAM permissions and GitHub secrets
       name: production
       url: https://pizza.byucsstudent.click
     steps:
