@@ -79,16 +79,15 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    env:
-      version: ${{needs.build.outputs.version}}
     steps:
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{needs.build.outputs.version}}
         with:
-          tag_name: version-${version}
-          release_name: Version ${version}
+            tag_name: version-${{ env.version }}
+          release_name: Version ${{ env.version }}
           body: |
             ## Changes
 
