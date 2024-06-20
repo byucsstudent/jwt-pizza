@@ -86,7 +86,6 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{needs.build.outputs.version}}
         with:
           tag: version-${{ env.version }}
