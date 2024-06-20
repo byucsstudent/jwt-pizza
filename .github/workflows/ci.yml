@@ -31,6 +31,7 @@ jobs:
             This is a very important release
 
             commit: ${{ github.ref }}
+            message: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
 
