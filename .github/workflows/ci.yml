@@ -86,7 +86,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{needs.build.outputs.version}}
         with:
-            tag_name: version-${{ env.version }}
+          tag_name: version-${{ env.version }}
           release_name: Version ${{ env.version }}
           body: |
             ## Changes
