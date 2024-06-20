@@ -84,21 +84,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           version: ${{needs.build.outputs.version}}
         with:
-          tag_name: version-${{ env.version }}
-          release_name: Version ${{ env.version }}
+          tag: version-${{ env.version }}
+          name: Version ${{ env.version }}
           body: |
             ## Changes
 
             ${{ github.event.head_commit.message }}
 
             **commit**: ${{ github.sha }}
-          draft: false
-          prerelease: false
+
 # --------------------------------------------------
 # name: Build, test, and deploy to GitHub Pages
 
