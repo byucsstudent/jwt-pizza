@@ -79,13 +79,16 @@ jobs:
       - name: Push to AWS S3
         run: |
           aws s3 cp dist s3://pizza.byucsstudent.click/$version --recursive
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
       - name: Update staging version
         run: |
-          aws cloudfront get-distribution-config --id E2GRFXFEBQ5OEU > config.json
-          sed -i "s|\"OriginPath\": \".*\"|\"OriginPath\": \"$version\"|" config.json
-          cat config.json | jq '.DistributionConfig'
+          aws cloudfront get-distribution-config --id ${{ secrets.DISTRIBUTION_ID }} > original.json
+          etag=$(jq -r '.ETag' original.json)
+          jq '.DistributionConfig' original.json > request.json
+          jq --arg version "/$version" '.Origins.Items[0].OriginPath = $version' request.json > finalRequest.json
+          aws cloudfront update-distribution --id ${{ secrets.DISTRIBUTION_ID }} --if-match $etag --distribution-config file://finalRequest.json
+          while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
   release:
     needs:
