@@ -81,6 +81,12 @@ jobs:
           aws s3 cp dist s3://pizza.byucsstudent.click/$version --recursive
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
+      - name: Update staging version
+        run: |
+          aws cloudfront get-distribution-config --id E2GRFXFEBQ5OEU > config.json
+          sed -i "s|\"OriginPath\": \".*\"|\"OriginPath\": \"$version\"|" config.json
+          cat config.json | jq '.DistributionConfig'
+
   release:
     needs:
       - build
