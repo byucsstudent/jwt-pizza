@@ -80,14 +80,14 @@ jobs:
         run: |
           aws s3 cp dist s3://pizza.byucsstudent.click/$version --recursive
 
-      - name: Update staging version
+      - name: Update staging cloudfront distribution
         run: |
           aws cloudfront get-distribution-config --id ${{ secrets.DISTRIBUTION_ID }} > original.json
           etag=$(jq -r '.ETag' original.json)
           jq '.DistributionConfig' original.json > request.json
           jq --arg version "/$version" '.Origins.Items[0].OriginPath = $version' request.json > finalRequest.json
           aws cloudfront update-distribution --id ${{ secrets.DISTRIBUTION_ID }} --if-match $etag --distribution-config file://finalRequest.json
-          while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
+          while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 15; done
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
   release:
