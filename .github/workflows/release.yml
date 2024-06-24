@@ -7,12 +7,17 @@ on:
         required: true
       description:
         required: true
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
-    permissions:
-      id-token: write
-      contents: write
     runs-on: ubuntu-latest
     env:
       version: ${{ github.event.inputs.version }}
