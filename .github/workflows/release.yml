@@ -7,9 +7,6 @@ on:
         required: true
       description:
         required: true
-  push:
-    branches:
-      - main
 
 permissions:
   id-token: write
