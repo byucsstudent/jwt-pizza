@@ -12,6 +12,7 @@ jobs:
   release:
     permissions:
       id-token: write
+      contents: write
     runs-on: ubuntu-latest
     env:
       version: ${{ github.event.inputs.version }}
