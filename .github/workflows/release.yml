@@ -45,8 +45,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: production-version-${{ env.version }}
-          name: Production release ${{ env.version }}
-          repo: jwt-pizza
+          name: Production ${{ env.version }}
           allowUpdates: true
           generateReleaseNotes: true
           makeLatest: true

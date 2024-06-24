@@ -105,9 +105,10 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: stage-version-${{ env.version }}
-          name: Staging release ${{ env.version }}
+          name: Staging ${{ env.version }}
+          generateReleaseNotes: true
           body: |
-            ## 🚀 Description
+            ## Description
 
             ${{ github.event.head_commit.message }}
 
