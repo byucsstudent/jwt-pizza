@@ -52,7 +52,7 @@ jobs:
         with:
           name: package
           path: dist/
-  deploy:
+  archive:
     needs: build
     permissions:
       id-token: write
@@ -80,38 +80,38 @@ jobs:
         run: |
           aws s3 cp dist s3://pizza.byucsstudent.click/$version --recursive
 
-      - name: Update the cloudfront distribution
-        run: |
-          # Get the current distribution and update it to use the new version
-          aws cloudfront get-distribution-config --id ${{ secrets.DISTRIBUTION_ID }} > original.json
-          etag=$(jq -r '.ETag' original.json)
-          jq '.DistributionConfig' original.json > request.json
-          jq --arg version "/$version" '.Origins.Items[0].OriginPath = $version' request.json > finalRequest.json
-          aws cloudfront update-distribution --id ${{ secrets.DISTRIBUTION_ID }} --if-match $etag --distribution-config file://finalRequest.json
+      # - name: Update the cloudfront distribution
+      #   run: |
+      #     # Get the current distribution and update it to use the new version
+      #     aws cloudfront get-distribution-config --id ${{ secrets.DISTRIBUTION_ID }} > original.json
+      #     etag=$(jq -r '.ETag' original.json)
+      #     jq '.DistributionConfig' original.json > request.json
+      #     jq --arg version "/$version" '.Origins.Items[0].OriginPath = $version' request.json > finalRequest.json
+      #     aws cloudfront update-distribution --id ${{ secrets.DISTRIBUTION_ID }} --if-match $etag --distribution-config file://finalRequest.json
 
-          # Wait for the distribution to deploy and then invalidate the cache
-          while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+      #     # Wait for the distribution to deploy and then invalidate the cache
+      #     while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
+      #     aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
-  release:
-    needs:
-      - build
-      - deploy
-    runs-on: ubuntu-latest
-    env:
-      version: ${{needs.build.outputs.version}}
-    steps:
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: version-${{ env.version }}
-          name: Version ${{ env.version }}
-          body: |
-            ## 🚀 Changes
+  # release:
+  #   needs:
+  #     - build
+  #     - deploy
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     version: ${{needs.build.outputs.version}}
+  #   steps:
+  #     - name: Create Release
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         tag: version-${{ env.version }}
+  #         name: Version ${{ env.version }}
+  #         body: |
+  #           ## 🚀 Changes
 
-            ${{ github.event.head_commit.message }}
+  #           ${{ github.event.head_commit.message }}
 
-            **commit**: ${{ github.sha }}
+  #           **commit**: ${{ github.sha }}
 
 # --------------------------------------------------
 # name: Build, test, and deploy to GitHub Pages
