@@ -48,7 +48,9 @@ jobs:
           tag: production-version-${{ env.version }}
           name: Production release ${{ env.version }}
           repo: jwt-pizza
-          replacesArtifacts: false
+          allowUpdates: true
+          generateReleaseNotes: true
+          makeLatest: true
           body: |
             ## 🚀 Description
 
