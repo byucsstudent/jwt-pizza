@@ -43,8 +43,8 @@ jobs:
       - name: Create production release
         uses: ncipollo/release-action@v1
         with:
-          tag: version-$version
-          name: Production release $version
+          tag: production-version-${{ env.version }}
+          name: Production release ${{ env.version }}
           body: |
             ## 🚀 Description
 

@@ -107,7 +107,7 @@ jobs:
           tag: stage-version-${{ env.version }}
           name: Staging release ${{ env.version }}
           body: |
-            ## 🚀 Changes
+            ## 🚀 Description
 
             ${{ github.event.head_commit.message }}
 
