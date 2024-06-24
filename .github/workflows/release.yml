@@ -10,7 +10,8 @@ on:
 
 jobs:
   release:
-    name: Build frontend
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     env:
       version: ${{ github.event.inputs.version }}
@@ -39,11 +40,11 @@ jobs:
         #   while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
         #   aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
-      - name: Create Release
+      - name: Create production release
         uses: ncipollo/release-action@v1
         with:
           tag: version-$version
-          name: Version $version
+          name: Production release $version
           body: |
             ## 🚀 Description
 
