@@ -52,7 +52,7 @@ jobs:
         with:
           name: package
           path: dist/
-  archive:
+  deploy:
     needs: build
     permissions:
       id-token: write
@@ -96,7 +96,7 @@ jobs:
   release:
     needs:
       - build
-      - archive
+      - deploy
     runs-on: ubuntu-latest
     env:
       version: ${{needs.build.outputs.version}}
