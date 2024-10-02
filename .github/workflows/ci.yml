@@ -26,10 +26,11 @@ jobs:
           version=$(date +'%Y%m%d.%H%M%S')
           echo "version=$version" >> "$GITHUB_OUTPUT"
           printf '{"version": "%s" }' "$version" > public/version.json
-          - name: Build
-          run: |
-            npm ci && npm run build
-            cp dist/index.html dist/404.html
+
+      - name: Build
+        run: |
+          npm ci && npm run build
+          cp dist/index.html dist/404.html
 
       - name: Update dist artifact
         uses: actions/upload-artifact@v4
