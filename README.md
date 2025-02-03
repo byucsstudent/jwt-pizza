@@ -1,6 +1,6 @@
 # 🍕 JWT Pizza
 
-![Coverage badge](coverageBadge.svg)
+![Coverage badge](https://badge.cs329.click/badge/byucsstudent/jwtpizzacoverage)
 
 [![CI Pipeline](https://github.com/byucsstudent/jwt-pizza/actions/workflows/ci.yml/badge.svg)](https://github.com/byucsstudent/jwt-pizza/actions/workflows/ci.yml)
 
@@ -12,8 +12,7 @@ You can see a working example of the application at [pizza.cs329.click](https://
 
 ## Running locally
 
-1. Fork this repository
-   ![Fork repo](forkRepo.png)
+1. Fork this repository ![Fork repo](forkRepo.png)
 
    and then clone the fork from your GitHub account to your development environment.
 

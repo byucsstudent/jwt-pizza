@@ -5,6 +5,16 @@ test('home page', async ({ page }) => {
   expect(await page.title()).toBe('JWT Pizza');
 });
 
+test('register', async ({ page }) => {
+  await page.route('*/**/api/franchise/*', async (route) => {
+    const storeRes = { id: 4, name: 'Lehi', address: '123 Main St' };
+    expect(route.request().method()).toBe('GET');
+    await route.fulfill({ json: storeRes });
+  });
+
+  await page.goto('http://localhost:5173/api/franchise/1');
+});
+
 test('purchase with login', async ({ page }) => {
   await page.route('*/**/api/order/menu', async (route) => {
     const menuRes = [
