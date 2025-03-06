@@ -1,0 +1,35 @@
+name: Production release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
+      description:
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      version: ${{ github.event.inputs.version }}
+    environment:
+      name: production
+      url: https://pizza.byucsstudent.click
+    steps:
+      - name: Create production release
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+        with:
+          tag: production-version-${{ env.version }}
+          name: Production ${{ env.version }}
+          allowUpdates: true
+          generateReleaseNotes: true
+          makeLatest: true
+          body: |
+            ## 🚀 Description
+
+            ${{ github.event.inputs.description }}
