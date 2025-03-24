@@ -95,3 +95,7 @@ jobs:
             ## 🚀 Description
 
             ${{ github.event.inputs.description }}
+      - name: Annotate deployment in Grafana
+      run: |
+        curl -X POST https://be329w25.grafana.net/api/annotations -H "Authorization: Bearer ${{ secrets.GRAFANA_ACCESS_TOKEN }}" -H "Content-Type:application/json" -d '{"dashboardUID":"ceevcz47l2ps0a", "panelId":2, "tags":["backend","production"], "text":"Version '"$version"' deployed" }'
+    

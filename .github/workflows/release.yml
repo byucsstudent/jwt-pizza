@@ -32,4 +32,6 @@ jobs:
           body: |
             ## 🚀 Description
 
+            This deployment does nothing more than create a release record.
+
             ${{ github.event.inputs.description }}
