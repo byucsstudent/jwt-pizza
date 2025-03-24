@@ -80,3 +80,16 @@ jobs:
           echo Deploying $version
           aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/$version --recursive
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+
+      - name: Create staging release
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+        with:
+          tag: staging-version-${{ env.version }}
+          name: Staging ${{ env.version }}
+          allowUpdates: true
+          generateReleaseNotes: true
+          makeLatest: true
+          body: |
+            ## 🚀 Description
+
+            ${{ github.event.inputs.description }}
