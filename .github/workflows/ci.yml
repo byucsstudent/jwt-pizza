@@ -81,6 +81,8 @@ jobs:
         run: |
           echo Deploying $version
           aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/$version --recursive
+          aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/production --recursive
+          aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/staging --recursive
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
       - name: Create staging release
