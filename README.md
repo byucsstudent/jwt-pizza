@@ -63,7 +63,7 @@ npm install react react-dom react-router-dom
 
 ### Tailwind
 
-To process the Tailwind css we are going to use `postcss` and `autoprefixer`.
+To process the Tailwind css we use `postcss` and `autoprefixer`.
 
 ```sh
 npm install -D tailwindcss postcss autoprefixer

@@ -43,33 +43,31 @@ class HttpPizzaService implements PizzaService {
 
   async login(email: string, password: string): Promise<User> {
     const { user, token } = await this.callEndpoint('/api/auth', 'PUT', { email, password });
-    localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', token);
     return Promise.resolve(user);
   }
 
   async register(name: string, email: string, password: string): Promise<User> {
     const { user, token } = await this.callEndpoint('/api/auth', 'POST', { name, email, password });
-    localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', token);
     return Promise.resolve(user);
   }
 
-  async logout(): Promise<void> {
-    return new Promise(async (resolve) => {
-      await this.callEndpoint('/api/auth', 'DELETE');
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      resolve();
-    });
+  logout(): void {
+    this.callEndpoint('/api/auth', 'DELETE');
+    localStorage.removeItem('token');
   }
 
   async getUser(): Promise<User | null> {
-    return new Promise((resolve) => {
-      let user: User | null = JSON.parse(localStorage.getItem('user') || 'null');
-
-      return resolve(user);
-    });
+    let result: User | null = null;
+    if (localStorage.getItem('token')) {
+      try {
+        result = await this.callEndpoint('/api/user/me');
+      } catch (e) {
+        localStorage.removeItem('token');
+      }
+    }
+    return Promise.resolve(result);
   }
 
   async getMenu(): Promise<Menu> {

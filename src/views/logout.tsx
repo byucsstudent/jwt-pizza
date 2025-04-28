@@ -12,16 +12,14 @@ export default function Logout(props: Props) {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    (async () => {
-      await pizzaService.logout();
-      props.setUser(null);
-      navigate('/');
-    })();
+    pizzaService.logout();
+    props.setUser(null);
+    navigate('/');
   }, []);
 
   return (
-    <View title="Logout">
-      <div className="text-neutral-100">Logging out ...</div>
+    <View title='Logout'>
+      <div className='text-neutral-100'>Logging out ...</div>
     </View>
   );
 }
