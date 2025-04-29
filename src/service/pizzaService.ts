@@ -51,11 +51,11 @@ type UserRole = {
 };
 
 type User = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  roles: UserRole[];
+  id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  roles?: UserRole[];
 };
 
 type Store = {
