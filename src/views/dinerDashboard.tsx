@@ -4,8 +4,12 @@ import View from './view';
 import { pizzaService } from '../service/service';
 import { Order, OrderHistory, Role, User } from '../service/pizzaService';
 
-export default function DinerDashboard({ user }: { user: User | null }) {
-  user = user || ({} as User);
+interface Props {
+  user: User | null;
+}
+
+export default function DinerDashboard(props: Props) {
+  const user = props.user || ({} as User);
   const [orders, setOrders] = React.useState<Order[]>([]);
 
   React.useEffect(() => {
