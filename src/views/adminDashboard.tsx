@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NotFound from './notFound';
 import Button from '../components/button';
 import { pizzaService } from '../service/service';
-import { Franchise, Role, Store, User } from '../service/pizzaService';
+import { Franchise, Role, Store, User, UserList } from '../service/pizzaService';
 import { TrashIcon } from '../icons';
 
 interface Props {
@@ -14,12 +14,20 @@ interface Props {
 export default function AdminDashboard(props: Props) {
   const navigate = useNavigate();
   const [franchises, setFranchises] = React.useState<Franchise[]>([]);
+  const [userList, setUserList] = React.useState<UserList>({ users: [], more: false });
+  const [page, setPage] = React.useState(0);
 
   React.useEffect(() => {
     (async () => {
       setFranchises(await pizzaService.getFranchises());
     })();
   }, [props.user]);
+
+  React.useEffect(() => {
+    (async () => {
+      setUserList(await pizzaService.getUsers(page, 2, '*', '*', ''));
+    })();
+  }, [page]);
 
   function createFranchise() {
     navigate('/admin-dashboard/create-franchise');
@@ -33,13 +41,74 @@ export default function AdminDashboard(props: Props) {
     navigate('/admin-dashboard/close-store', { state: { franchise: franchise, store: store } });
   }
 
+  async function deleteUser(user: User) {
+    setUserList((prevUserList) => ({
+      ...prevUserList,
+      users: prevUserList.users.filter((u) => u.id !== user.id),
+    }));
+  }
+
   let response = <NotFound />;
   if (Role.isRole(props.user, Role.Admin)) {
     response = (
       <View title="Mama Ricci's kitchen">
         <div className="text-start py-8 px-4 sm:px-6 lg:px-8">
-          <div className="text-neutral-100">Keep the dough rolling and the franchises signing up.</div>
+          <div className="text-neutral-100">Keep the diners fat and happy!</div>
 
+          <div className="bg-neutral-100 overflow-clip my-4">
+            <div className="flex flex-col">
+              <div className="-m-1.5 overflow-x-auto">
+                <div className="p-1.5 min-w-full inline-block align-middle">
+                  <div className="overflow-hidden">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="uppercase text-neutral-100 bg-slate-400 border-b-2 border-gray-500">
+                        <tr>
+                          {['User', 'Role', 'Action'].map((header) => (
+                            <th key={header} scope="col" className="px-6 py-3 text-center text-xs font-medium">
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      {userList.users.map((user, uindex) => {
+                        return (
+                          <tbody key={uindex} className="divide-y divide-gray-200">
+                            <tr className="border-neutral-500 border-t-2">
+                              <td className="text-start px-2 whitespace-nowrap text-l font-mono text-orange-600">{user.name}</td>
+                              <td className="text-start px-2 whitespace-nowrap text-l font-mono text-orange-600">
+                                {user.roles &&
+                                  user.roles.map((role, index) => (
+                                    <span key={index}>
+                                      {index === 0 ? '' : ', '} {role.role}
+                                    </span>
+                                  ))}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800" onClick={() => deleteUser(user)}>
+                                  <TrashIcon />
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        );
+                      })}
+                      <tfoot>
+                        <tr>
+                          <td colSpan={3} className="text-end text-sm font-medium">
+                            <Button className="bg-white text-black border-black m-2  hover:bg-orange-200 disabled:bg-neutral-400 w-16 text-xs sm:text-sm sm:w-32" title="Previous" onPress={() => setPage(page - 1)} disabled={page <= 0} />
+                            <Button className="bg-white text-black border-black m-2  hover:bg-orange-200 disabled:bg-neutral-400 w-16 text-xs sm:text-sm sm:w-32" title="Next" onPress={() => setPage(page + 1)} disabled={!userList.more} />
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-neutral-100">Keep the dough rolling and the franchises signing up.</div>
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
               <div className="-m-1.5 overflow-x-auto">
@@ -64,10 +133,7 @@ export default function AdminDashboard(props: Props) {
                                 {franchise.admins?.map((o) => o.name).join(', ')}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                <button
-                                  type="button"
-                                  className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800"
-                                  onClick={() => closeFranchise(franchise)}>
+                                <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800" onClick={() => closeFranchise(franchise)}>
                                   <TrashIcon />
                                   Close
                                 </button>
@@ -82,10 +148,7 @@ export default function AdminDashboard(props: Props) {
                                   </td>
                                   <td className="text-end px-2 whitespace-nowrap text-sm text-gray-800">{store.totalRevenue?.toLocaleString()} ₿</td>
                                   <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <button
-                                      type="button"
-                                      className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
-                                      onClick={() => closeStore(franchise, store)}>
+                                    <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800" onClick={() => closeStore(franchise, store)}>
                                       <TrashIcon />
                                       Close
                                     </button>
