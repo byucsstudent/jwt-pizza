@@ -120,4 +120,4 @@ interface PizzaService {
   docs(docType: string): Promise<Endpoints>;
 }
 
-export { Role, PizzaService, User, UserList, Menu, Pizza, OrderHistory, Order, Franchise, FranchiseList, Store, OrderItem, Endpoint, Endpoints, OrderResponse, JWTPayload };
+export { Role, UserRole, PizzaService, User, UserList, Menu, Pizza, OrderHistory, Order, Franchise, FranchiseList, Store, OrderItem, Endpoint, Endpoints, OrderResponse, JWTPayload };
