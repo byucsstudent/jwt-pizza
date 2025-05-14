@@ -62,7 +62,7 @@ export default function AdminDashboard(props: Props) {
     response = (
       <View title="Mama Ricci's kitchen">
         <div className="text-start py-8 px-4 sm:px-6 lg:px-8">
-
+          <h3 className="text-neutral-100 text-xl">Users</h3>
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
               <div className="-m-1.5 overflow-x-auto">
