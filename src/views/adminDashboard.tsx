@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NotFound from './notFound';
 import Button from '../components/button';
 import { pizzaService } from '../service/service';
-import { Franchise, Role, Store, User, UserList } from '../service/pizzaService';
+import { Franchise, FranchiseList, Role, Store, User, UserList } from '../service/pizzaService';
 import { TrashIcon } from '../icons';
 
 interface Props {
@@ -13,16 +13,18 @@ interface Props {
 
 export default function AdminDashboard(props: Props) {
   const navigate = useNavigate();
-  const [franchises, setFranchises] = React.useState<Franchise[]>([]);
+  const [franchiseList, setFranchiseList] = React.useState<FranchiseList>({ franchises: [], more: false });
   const [userList, setUserList] = React.useState<UserList>({ users: [], more: false });
   const [page, setPage] = React.useState(0);
+  const [franchisePage, setFranchisePage] = React.useState(0);
   const filterRef = React.useRef<HTMLInputElement>(null);
+  const filterFranchiseRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     (async () => {
-      setFranchises(await pizzaService.getFranchises());
+      setFranchiseList(await pizzaService.getFranchises(franchisePage, 3, '*'));
     })();
-  }, [props.user]);
+  }, [props.user, franchisePage]);
 
   React.useEffect(() => {
     (async () => {
@@ -34,11 +36,11 @@ export default function AdminDashboard(props: Props) {
     navigate('/admin-dashboard/create-franchise');
   }
 
-  function closeFranchise(franchise: Franchise) {
+  async function closeFranchise(franchise: Franchise) {
     navigate('/admin-dashboard/close-franchise', { state: { franchise: franchise } });
   }
 
-  function closeStore(franchise: Franchise, store: Store) {
+  async function closeStore(franchise: Franchise, store: Store) {
     navigate('/admin-dashboard/close-store', { state: { franchise: franchise, store: store } });
   }
 
@@ -51,12 +53,15 @@ export default function AdminDashboard(props: Props) {
     setUserList(await pizzaService.getUsers(page, 10, '*', `*${filterRef.current?.value}*`, ''));
   }
 
+  async function filterFranchises() {
+    setFranchiseList(await pizzaService.getFranchises(franchisePage, 10, `*${filterFranchiseRef.current?.value}*`));
+  }
+
   let response = <NotFound />;
   if (Role.isRole(props.user, Role.Admin)) {
     response = (
       <View title="Mama Ricci's kitchen">
         <div className="text-start py-8 px-4 sm:px-6 lg:px-8">
-          <h3 className="text-neutral-100">Diners</h3>
 
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
@@ -137,7 +142,7 @@ export default function AdminDashboard(props: Props) {
                           ))}
                         </tr>
                       </thead>
-                      {franchises.map((franchise, findex) => {
+                      {franchiseList.franchises.map((franchise, findex) => {
                         return (
                           <tbody key={findex} className="divide-y divide-gray-200">
                             <tr className="border-neutral-500 border-t-2">
@@ -172,6 +177,24 @@ export default function AdminDashboard(props: Props) {
                           </tbody>
                         );
                       })}
+                      <tfoot>
+                        <tr>
+                          <td className="px-1 py-1">
+                            <input type="text" ref={filterFranchiseRef} name="filterFranchise" placeholder="Filter franchises" className="px-2 py-1 text-sm border border-gray-300 rounded-lg" />
+                            <button type="submit" className="ml-2 px-2 py-1 text-sm font-semibold rounded-lg border border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800" onClick={filterFranchises}>
+                              Submit
+                            </button>
+                          </td>
+                          <td colSpan={4} className="text-end text-sm font-medium">
+                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300 " onClick={() => setFranchisePage(franchisePage - 1)} disabled={franchisePage <= 0}>
+                              «
+                            </button>
+                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300" onClick={() => setFranchisePage(franchisePage + 1)} disabled={!franchiseList.more}>
+                              »
+                            </button>
+                          </td>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
