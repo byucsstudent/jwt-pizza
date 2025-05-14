@@ -99,26 +99,35 @@ test('listUsers', async ({ page }) => {
     { id: '2', name: 'user 2', email: '2@jwt.com', password: '', roles: [{ role: Role.Diner }] },
     { id: '3', name: 'user 3', email: '3@jwt.com', password: '', roles: [{ role: Role.Diner }] },
     { id: '4', name: 'user 4', email: '4@jwt.com', password: '', roles: [{ role: Role.Diner }] },
+    { id: '5', name: 'user 5', email: '5@jwt.com', password: '', roles: [{ role: Role.Diner }] },
+    { id: '6', name: 'user 6', email: '6@jwt.com', password: '', roles: [{ role: Role.Diner }] },
+    { id: '7', name: 'user 7', email: '7@jwt.com', password: '', roles: [{ role: Role.Diner }] },
+    { id: '8', name: 'user 8', email: '8@jwt.com', password: '', roles: [{ role: Role.Diner }] },
+    { id: '9', name: 'user 9', email: '9@jwt.com', password: '', roles: [{ role: Role.Diner }] },
   ];
 
   allUsers = {
     users: [currentUser, ...moreUsers],
-    more: false,
+    more: true,
   };
 
   await page.getByRole('link', { name: 'Admin' }).click();
   await expect(page.getByText(`常用名字`, { exact: true })).toBeVisible();
-
-  await page.getByRole('textbox', { name: 'Filter users' }).fill('常用名字');
-  await page.getByRole('button', { name: 'Submit' }).first().click();
+  await expect(page.getByRole('button', { name: '«' }).first()).toBeDisabled();
+  await expect(page.getByRole('button', { name: '»' }).first()).toBeEnabled();
 
   allUsers = {
     users: [currentUser],
     more: false,
   };
 
-  await expect(page.getByText(`常用名字`, { exact: true })).toBeVisible();
+  await page.getByRole('textbox', { name: 'Filter users' }).fill('常用名字');
+  await page.getByRole('button', { name: 'Submit' }).first().click();
+
   await expect(page.getByText(`user 3`, { exact: true })).not.toBeVisible();
+  await expect(page.getByText(`常用名字`, { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '«' }).first()).toBeDisabled();
+  await expect(page.getByRole('button', { name: '»' }).first()).toBeDisabled();
 
   allUsers = {
     users: [currentUser, ...moreUsers],
