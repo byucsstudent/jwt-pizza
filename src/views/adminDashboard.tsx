@@ -126,7 +126,7 @@ export default function AdminDashboard(props: Props) {
             </div>
           </div>
 
-          <div className="text-neutral-100">Keep the dough rolling and the franchises signing up.</div>
+          <h3 className="text-neutral-100 text-xl">Franchises</h3>
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
               <div className="-m-1.5 overflow-x-auto">
@@ -150,7 +150,7 @@ export default function AdminDashboard(props: Props) {
                               <td className="text-start px-2 whitespace-nowrap text-sm font-normal text-gray-800" colSpan={3}>
                                 {franchise.admins?.map((o) => o.name).join(', ')}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                              <td className="px-6 py-1 whitespace-nowrap text-end text-sm font-medium">
                                 <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800" onClick={() => closeFranchise(franchise)}>
                                   <TrashIcon />
                                   Close
@@ -165,7 +165,7 @@ export default function AdminDashboard(props: Props) {
                                     {store.name}
                                   </td>
                                   <td className="text-end px-2 whitespace-nowrap text-sm text-gray-800">{store.totalRevenue?.toLocaleString()} ₿</td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                  <td className="px-6 py-1 whitespace-nowrap text-end text-sm font-medium">
                                     <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800" onClick={() => closeStore(franchise, store)}>
                                       <TrashIcon />
                                       Close
