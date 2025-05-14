@@ -25,7 +25,7 @@ export default function AdminDashboard(props: Props) {
 
   React.useEffect(() => {
     (async () => {
-      setUserList(await pizzaService.getUsers(page, 2, '*', '*', ''));
+      setUserList(await pizzaService.getUsers(page, 10, '*', '*', ''));
     })();
   }, [page]);
 
@@ -42,10 +42,8 @@ export default function AdminDashboard(props: Props) {
   }
 
   async function deleteUser(user: User) {
-    setUserList((prevUserList) => ({
-      ...prevUserList,
-      users: prevUserList.users.filter((u) => u.id !== user.id),
-    }));
+    await pizzaService.deleteUser(user);
+    setUserList(await pizzaService.getUsers(page, 10, '*', '*', ''));
   }
 
   let response = <NotFound />;
@@ -53,7 +51,7 @@ export default function AdminDashboard(props: Props) {
     response = (
       <View title="Mama Ricci's kitchen">
         <div className="text-start py-8 px-4 sm:px-6 lg:px-8">
-          <div className="text-neutral-100">Keep the diners fat and happy!</div>
+          <h3 className="text-neutral-100">Diners</h3>
 
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
@@ -83,7 +81,7 @@ export default function AdminDashboard(props: Props) {
                                     </span>
                                   ))}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                              <td className="px-6 py-1 whitespace-nowrap text-end text-sm font-medium">
                                 <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800" onClick={() => deleteUser(user)}>
                                   <TrashIcon />
                                   Delete
@@ -96,8 +94,12 @@ export default function AdminDashboard(props: Props) {
                       <tfoot>
                         <tr>
                           <td colSpan={3} className="text-end text-sm font-medium">
-                            <Button className="bg-white text-black border-black m-2  hover:bg-orange-200 disabled:bg-neutral-400 w-16 text-xs sm:text-sm sm:w-32" title="Previous" onPress={() => setPage(page - 1)} disabled={page <= 0} />
-                            <Button className="bg-white text-black border-black m-2  hover:bg-orange-200 disabled:bg-neutral-400 w-16 text-xs sm:text-sm sm:w-32" title="Next" onPress={() => setPage(page + 1)} disabled={!userList.more} />
+                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300 " onClick={() => setPage(page - 1)} disabled={page <= 0}>
+                              «
+                            </button>
+                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300" onClick={() => setPage(page + 1)} disabled={!userList.more}>
+                              »
+                            </button>
                           </td>
                         </tr>
                       </tfoot>

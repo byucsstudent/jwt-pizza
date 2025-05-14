@@ -46,9 +46,10 @@ test('listUsers', async ({ page }) => {
 });
 
 async function registerUser(page: Page): Promise<string> {
-  const email = `user${Math.floor(Math.random() * 10000)}@jwt.com`;
+  const name = Math.floor(Math.random() * 10000);
+  const email = `user${name}@jwt.com`;
   await page.getByRole('link', { name: 'Register' }).click();
-  await page.getByRole('textbox', { name: 'Full name' }).fill('pizza diner');
+  await page.getByRole('textbox', { name: 'Full name' }).fill(name.toString());
   await page.getByRole('textbox', { name: 'Email address' }).fill(email);
   await page.getByRole('textbox', { name: 'Password' }).fill('diner');
   await page.getByRole('button', { name: 'Register' }).click();
