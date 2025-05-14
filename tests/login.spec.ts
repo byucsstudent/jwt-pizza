@@ -51,6 +51,12 @@ test('purchase with login', async ({ page }) => {
     await route.fulfill({ json: loginRes });
   });
 
+  await page.route('*/**/api/user/me', async (route) => {
+    const getMeRes = { user: { id: 3, name: 'Kai Chen', email: 'd@jwt.com', roles: [{ role: 'diner' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('GET');
+    await route.fulfill({ json: getMeRes });
+  });
+
   await page.route('*/**/api/order', async (route) => {
     const orderReq = {
       items: [
