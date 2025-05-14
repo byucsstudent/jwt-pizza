@@ -51,51 +51,51 @@ jobs:
           name: package
           path: dist/
 
-  deploy:
-    needs: build
-    permissions:
-      id-token: write
-      contents: write
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://pizza.byucsstudent.click
-    env:
-      version: ${{needs.build.outputs.version}}
-    steps:
-      - name: Create OIDC token to AWS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          audience: sts.amazonaws.com
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
+  # deploy:
+  #   needs: build
+  #   permissions:
+  #     id-token: write
+  #     contents: write
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: production
+  #     url: https://pizza.byucsstudent.click
+  #   env:
+  #     version: ${{needs.build.outputs.version}}
+  #   steps:
+  #     - name: Create OIDC token to AWS
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         audience: sts.amazonaws.com
+  #         aws-region: us-east-1
+  #         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
 
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: package
-          path: dist/
+  #     - name: Download dist artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: package
+  #         path: dist/
 
-      - name: Push to AWS S3
-        run: |
-          echo Deploying $version
-          aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/$version --recursive
-          aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/production --recursive
-          aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/staging --recursive
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+  #     - name: Push to AWS S3
+  #       run: |
+  #         echo Deploying $version
+  #         aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/$version --recursive
+  #         aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/production --recursive
+  #         aws s3 cp dist s3://${{ secrets.APP_BUCKET }}/staging --recursive
+  #         aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
-      - name: Create staging release
-        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
-        with:
-          tag: staging-version-${{ env.version }}
-          name: Staging ${{ env.version }}
-          allowUpdates: true
-          generateReleaseNotes: true
-          makeLatest: true
-          body: |
-            ## 🚀 Description
+  #     - name: Create staging release
+  #       uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+  #       with:
+  #         tag: staging-version-${{ env.version }}
+  #         name: Staging ${{ env.version }}
+  #         allowUpdates: true
+  #         generateReleaseNotes: true
+  #         makeLatest: true
+  #         body: |
+  #           ## 🚀 Description
 
-            ${{ github.event.inputs.description }}
-      - name: Annotate deployment in Grafana
-        run: |
-          curl -X POST https://be329w25.grafana.net/api/annotations -H "Authorization: Bearer ${{ secrets.GRAFANA_ACCESS_TOKEN }}" -H "Content-Type:application/json" -d '{"dashboardUID":"ceevcz47l2ps0a", "panelId":2, "tags":["backend","production"], "text":"Version '"$version"' deployed" }'
+  #           ${{ github.event.inputs.description }}
+  #     - name: Annotate deployment in Grafana
+  #       run: |
+  #         curl -X POST https://be329w25.grafana.net/api/annotations -H "Authorization: Bearer ${{ secrets.GRAFANA_ACCESS_TOKEN }}" -H "Content-Type:application/json" -d '{"dashboardUID":"ceevcz47l2ps0a", "panelId":2, "tags":["backend","production"], "text":"Version '"$version"' deployed" }'
