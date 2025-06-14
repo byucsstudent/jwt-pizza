@@ -23,8 +23,8 @@ echo "{\"version\":\"$(date +"%Y%m%d.%H%M%S")\" }" > dist/version.json
 # Step 2
 printf "\n----> Clearing out previous distribution on the target\n"
 ssh -i "$key" ubuntu@$hostname << ENDSSH
-rm -rf services/${service}
-mkdir -p services/${service}
+rm -rf public_html/${service}
+mkdir -p public_html/${service}
 ENDSSH
 
 # Step 3
