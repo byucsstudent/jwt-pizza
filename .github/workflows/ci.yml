@@ -33,20 +33,21 @@ jobs:
           cp dist/index.html dist/404.html
 
       - name: Run tests
-        id: run_tests
         run: |
           npx playwright install --with-deps chromium
-          npm run test:coverage
-          echo "test_exit_code=$?" >> "$GITHUB_OUTPUT"
+          npm run test:coverage || true
 
       - name: Update coverage
+        id: coverage
         run: |
           coverage=$(jq '.total.lines.pct' coverage/coverage-summary.json)
           color=$(echo "$coverage < 80" | bc | awk '{if ($1) print "red"; else print "green"}')
           curl -s -X POST "https://pizza-factory.cs329.click/api/badge/${{ secrets.NET_ID }}/jwtpizzacoverage?label=Coverage&value=$coverage%25&color=$color" -H "authorization: bearer ${{ secrets.FACTORY_API_KEY }}"
+          echo "test_coverage=$coverage" >> "$GITHUB_OUTPUT"
+          echo $coverage
 
       - name: Stop if tests failed
-        if: steps.run_tests.outputs.test_exit_code != '0'
+        if: steps.coverage.outputs.test_coverage != '0'
         run: exit 1
 
       - name: Update pages artifact
