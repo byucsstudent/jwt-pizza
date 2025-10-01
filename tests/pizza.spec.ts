@@ -6,7 +6,19 @@ test('Homepage loads', async ({ page }) => {
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle('JWT Pizza');
 });
+
 test('purchase with login', async ({ page }) => {
+  await page.route('*/**/api/user/me', async (route) => {
+    const meRes = {
+      id: 3,
+      name: 'Kai Chen',
+      email: 'd@jwt.com',
+      roles: [{ role: 'diner' }],
+    };
+    expect(route.request().method()).toBe('GET');
+    await route.fulfill({ json: meRes });
+  });
+
   await page.route('*/**/api/order/menu', async (route) => {
     const menuRes = [
       {
