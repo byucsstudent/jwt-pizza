@@ -60,10 +60,9 @@ export default function App() {
   function isNotAdmin() {
     return !isAdmin();
   }
-
   const navItems = [
     { title: 'Home', to: '/', component: <Home />, display: [] },
-    { title: 'Diner', to: '/diner-dashboard', component: <DinerDashboard user={user} />, display: [] },
+    { title: 'Diner', to: '/diner-dashboard', component: <DinerDashboard user={user} setUser={setUser} />, display: [] },
     { title: 'Order', to: '/menu', component: <Menu />, display: ['nav'] },
     {
       title: 'Franchise',
@@ -89,11 +88,11 @@ export default function App() {
   ];
 
   return (
-    <div className="bg-gray-800">
+    <div className='bg-gray-800'>
       <Header user={user} navItems={navItems} />
       <Breadcrumb location={location.pathname.replace('/', '')} />
 
-      <main className="size-full">
+      <main className='size-full'>
         <Routes>
           {navItems.map((item) => (
             <Route key={item.title} path={item.to} element={item.component} />
